@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd
+http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd
+http://www.liquibase.org/xml/ns/pro ">
+
+    <changeSet author="borisevich" id="2021-11-03-create-table-user-role">
+        <sql>CREATE TABLE `User_roles` (
+            `user_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+            `user_role_name` varchar(255) NOT NULL,
+            PRIMARY KEY (`user_id`)
+            )</sql>
+    </changeSet>
+    <changeSet author="borisevich" id="2021-11-03-create-table-user">
+        <sql>CREATE TABLE `Diary_users` (
+            `user_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+            `email` varchar(255) NOT NULL,
+            `user_password` varchar(255) NOT NULL,
+            `first_name` varchar(255) NOT NULL,
+            `last_name` varchar(255) NOT NULL,
+            `balance_amount` bigint(20) NOT NULL DEFAULT '0',
+            `user_role_id` int(11) DEFAULT '1',
+            PRIMARY KEY (`user_id`),
+            UNIQUE KEY `UNIQUE` (`email`),
+            KEY `user_role_idx` (`user_role_id`)
+            )</sql>
+    </changeSet>
+    <changeSet author="borisevich" id="2021-11-03-create-table-muscles">
+       <sql>CREATE TABLE `Muscles` (
+           `muscle_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+           `muscle_name` varchar(45) NOT NULL,
+           PRIMARY KEY (`muscle_id`),
+           UNIQUE KEY `Muscle_id_UNIQUE` (`muscle_id`),
+           UNIQUE KEY `Muscle_name_UNIQUE` (`muscle_name`)
+           )</sql>
+    </changeSet>
+    <changeSet author="borisevich" id="2021-11-03-create-table-exercise-name">
+        <sql> CREATE TABLE `Exercises_names` (
+            `name_exercises_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+            `name` varchar(255) NOT NULL,
+            PRIMARY KEY (`name_exercises_id`),
+            UNIQUE KEY `Unique` (`name`)
+            )</sql>
+    </changeSet>
+    <changeSet author="borisevich" id="2021-11-03-create-table-muscles-exercises-name">
+        <sql> CREATE TABLE `Muscles_x_Exercises_names` (
+            `name_exercises_id` BIGINT(20) NOT NULL,
+            `muscle_id` BIGINT(20) NOT NULL,
+            UNIQUE KEY `name_exercises_id` (`name_exercises_id`,`muscle_id`),
+            KEY `Muscles_x_Exercises_name_ibfk_1` (`muscle_id`),
+            CONSTRAINT `Muscles_x_Exercises_name_ibfk_1` FOREIGN KEY (`muscle_id`) REFERENCES `Muscles` (`muscle_id`),
+            CONSTRAINT `Muscles_x_Exercises_name_ibfk_2` FOREIGN KEY (`name_exercises_id`) REFERENCES `Exercises_names` (`name_exercises_id`)
+            )</sql>
+    </changeSet>
+    <changeSet author="borisevich" id="2021-11-03-create-table-training">
+        <sql>CREATE TABLE `Trainings` (
+            `training_id` varchar(255) NOT NULL,
+            `training_date` datetime DEFAULT NULL,
+            `user_id` BIGINT(20) NOT NULL,
+            PRIMARY KEY (`training_id`),
+            KEY `user_name_idx` (`user_id`),
+            CONSTRAINT `user_name` FOREIGN KEY (`user_id`) REFERENCES `Diary_users` (`user_id`) ON DELETE NO ACTION ON UPDATE CASCADE
+            )</sql>
+    </changeSet>
+    <changeSet author="borisevich" id="2021-11-03-create-table-exercise-on-training">
+        <sql>CREATE TABLE `Exercises_on_trainings` (
+            `exercise_id` bigint(20) NOT NULL,
+            `training_id` varchar(255) NOT NULL,
+            `name_exercises_id` bigint(20) NOT NULL,
+            `total_repeats` int(11) DEFAULT NULL,
+            `total_time` time DEFAULT NULL,
+            `total_weight` int(11) DEFAULT NULL,
+            `total_approaches` int(20) DEFAULT NULL,
+            PRIMARY KEY (`exercise_id`),
+            KEY `Training_id_fk_idx` (`training_id`),
+            KEY `Muscle_id_fk_idx` (`name_exercises_id`),
+            CONSTRAINT `Name_Exercises_fk` FOREIGN KEY (`name_exercises_id`) REFERENCES `Exercises_names` (`name_exercises_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+            CONSTRAINT `Training_id_fk` FOREIGN KEY (`training_id`) REFERENCES `Trainings` (`training_id`) ON DELETE NO ACTION ON UPDATE CASCADE
+            )</sql>
+    </changeSet>
+    <changeSet author="borisevich" id="2021-11-03-create-table-approaches">
+        <sql>CREATE TABLE `Approaches` (
+            `exercise_id` bigint(20) NOT NULL,
+            `approach_id` bigint(20) NOT NULL AUTO_INCREMENT,
+            `approach_counter` bigint(20) DEFAULT NULL,
+            `time` time DEFAULT NULL,
+            `weight` int(11) DEFAULT NULL,
+            `repeats` int(11) DEFAULT NULL,
+            PRIMARY KEY (`approach_id`),
+            KEY `Exercise_idx` (`exercise_id`)
+            ) </sql>
+    </changeSet>
+    <changeSet author="borisevich" id="2021-11-13-create-tables-country">
+        <sqlFile path="liquibase.sql" encoding="UTF-8" endDelimiter=";" splitStatements="true"
+                 stripComments="true" relativeToChangelogFile="true"/>
+    </changeSet>
+
+
+</databaseChangeLog>
