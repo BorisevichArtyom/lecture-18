@@ -7,9 +7,7 @@ import org.hibernate.annotations.Immutable;
 import javax.persistence.*;
 import java.time.Instant;
 
-//@Table(name = "Trainings", indexes = {
-//        @Index(name = "user_name_idx", columnList = "user_id")
-//})
+
 @Entity
 @Getter
 @Setter
