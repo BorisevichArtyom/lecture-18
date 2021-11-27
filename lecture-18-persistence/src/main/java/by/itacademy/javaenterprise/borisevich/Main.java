@@ -17,12 +17,12 @@ public class Main {
     public static void main(String[] args) throws DAOException {
         EntityManagerFactory emFactory = Persistence.createEntityManagerFactory("by.it");
         MuscleDAO muscleDAO = new MuscleDAOImpl(emFactory);
-        muscleDAO.findAllMuscles().forEach(System.out::println);
+        muscleDAO.findAllMuscles();
 
 
         TrainingDAO trainingDAO = new TrainingDAOImpl(emFactory);
 
-        trainingDAO.findAllTrainings().forEach(System.out::println);
+        trainingDAO.findAllTrainings();
         Training training =Training.builder().trainingDate(Instant.now()).user(DiaryUser.builder().id(1L).build()).build();
         trainingDAO.saveTraining(training);
 
